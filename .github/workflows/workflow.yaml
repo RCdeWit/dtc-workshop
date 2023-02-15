@@ -1,0 +1,12 @@
+name: CML
+on:
+  - push
+  - workflow_dispatch
+jobs:
+  train-and-report:
+    runs-on: ubuntu-latest
+    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          echo "The workflow is working!"
