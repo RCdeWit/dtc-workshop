@@ -130,7 +130,3 @@ dmypy.json
 
 # Mac
 **/.DS_Store
-
-# DVC tracked in other branches
-data
-outputs
