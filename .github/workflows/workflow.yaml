@@ -9,4 +9,21 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          echo "The workflow is working!"
+          # Install requirements
+          # Runner uses different tensorflow package, hence separate file
+          pip install -r requirements_runner.txt
+          
+          # Pull dataset with DVC
+          dvc pull
+
+          # Reproduce pipeline if any changes detected in dependencies
+          dvc repro
+          dvc push
+
+          # Create pull request
+          cml pr .
+
+          # Create CML report
+          cat outputs/metrics.yaml > report.md
+          cml publish outputs/confusion_matrix.png --md >> report.md
+          cml send-comment --pr --update report.md
