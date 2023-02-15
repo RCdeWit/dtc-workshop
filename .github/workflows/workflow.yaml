@@ -8,6 +8,7 @@ jobs:
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
       - uses: actions/checkout@v3
+      - uses: iterative/setup-dvc@v1
       - run: |
           # Install requirements
           # Runner uses different tensorflow package, hence separate file
