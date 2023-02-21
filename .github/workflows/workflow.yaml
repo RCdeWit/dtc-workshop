@@ -1,15 +1,42 @@
 name: CML
 on:
-  - push
+  # - push
   - workflow_dispatch
 jobs:
-  train-and-report:
+  deploy-runner:
     runs-on: ubuntu-latest
-    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/checkout@v3
-      - uses: iterative/setup-dvc@v1
-      - run: |
+      - uses: actions/checkout@v2
+      - uses: iterative/setup-cml@v1
+      - name: Deploy runner on EC2
+        env:
+          REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          cml runner \
+              --cloud=aws \
+              --cloud-region=eu-west \
+              --cloud-type=t2.micro \
+              --labels=cml-runner \
+              --single
+  train-model:
+    needs: deploy-runner
+    runs-on: [self-hosted, cml-runner]
+    timeout-minutes: 120 # 2h
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - uses: iterative/setup-cml@v1
+      - name: Train model
+        env:
+          REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
           # Install requirements
           # Runner uses different tensorflow package, hence separate file
           pip install -r requirements_runner.txt
