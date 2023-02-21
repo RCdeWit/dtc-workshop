@@ -1,6 +1,6 @@
 base:
   seed: 42
-  pokemon_type_train: Fire
+  pokemon_type_train: Steel
 
 data_preprocess:
   source_directory: data/external

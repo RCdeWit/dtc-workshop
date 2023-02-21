@@ -1,4 +1,7 @@
 [core]
     remote = gdriveremote
 ['remote "gdriveremote"']
-    url = gdrive://10z43Nc3NLXFFll7az76mi7v2Rk4ymqqz
+    url = gdrive://1viWdnQRytP5zOc9oqc7jTDWiT5zqCqcc
+    gdrive_client_id = 771108368870-vcrspgmah7drr1cjgdc89h51legnakkb.apps.googleusercontent.com
+    gdrive_client_secret = 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
+    gdrive_use_service_account = true

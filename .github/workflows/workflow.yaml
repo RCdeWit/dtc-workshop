@@ -17,7 +17,7 @@ jobs:
           cml runner \
               --cloud=aws \
               --cloud-region=eu-west \
-              --cloud-type=t2.micro \
+              --cloud-type=m+t4 \
               --labels=cml-runner \
               --single
   train-model:
@@ -36,6 +36,7 @@ jobs:
       - name: Train model
         env:
           REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
         run: |
           # Install requirements
           # Runner uses different tensorflow package, hence separate file

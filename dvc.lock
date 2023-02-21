@@ -17,7 +17,7 @@ stages:
       params.yaml:
         base:
           seed: 42
-          pokemon_type_train: Fire
+          pokemon_type_train: Steel
         data_preprocess:
           source_directory: data/external
           destination_directory: data/processed
@@ -51,7 +51,7 @@ stages:
       params.yaml:
         base:
           seed: 42
-          pokemon_type_train: Fire
+          pokemon_type_train: Steel
         data_preprocess:
           source_directory: data/external
           destination_directory: data/processed
@@ -62,35 +62,35 @@ stages:
       md5: 8f6555c6159e27739fd97a61ace395a4
       size: 2891610169
     - path: data/processed/X_test.pckl
-      md5: e5e4f1c3a0454ff8ad5c46bbe6fc486a
+      md5: 113e73e520ae58db1a615d70ddf1a8d4
       size: 581210168
     - path: data/processed/X_train.pckl
-      md5: e88c578e854382d2f9bbf9af87cc6fd3
+      md5: 70fa32b7adaadb3f8c521fbc1fbd685a
       size: 2310400169
     - path: data/processed/y.pckl
-      md5: 4ec8aec8c14b5896c15aed20b46f9e4b
-      size: 7071
+      md5: b9e4e91d42025eb84fccc7c588ffdd48
+      size: 7072
     - path: data/processed/y_test.pckl
-      md5: ee33f9eca5e99bde0c6e8196ddfac787
-      size: 3246
+      md5: 155a66155a9ae1e7ccbd7ee5f25247fc
+      size: 3247
     - path: data/processed/y_train.pckl
-      md5: 1d104a68abc723d955ece9ed1c3de3a7
-      size: 10912
+      md5: 74f3ed4caff5d27c902332558638e89a
+      size: 10913
   train:
     cmd: python3 src/train.py --params params.yaml
     deps:
     - path: data/processed/X_test.pckl
-      md5: e5e4f1c3a0454ff8ad5c46bbe6fc486a
+      md5: 113e73e520ae58db1a615d70ddf1a8d4
       size: 581210168
     - path: data/processed/X_train.pckl
-      md5: e88c578e854382d2f9bbf9af87cc6fd3
+      md5: 70fa32b7adaadb3f8c521fbc1fbd685a
       size: 2310400169
     - path: data/processed/y_test.pckl
-      md5: ee33f9eca5e99bde0c6e8196ddfac787
-      size: 3246
+      md5: 155a66155a9ae1e7ccbd7ee5f25247fc
+      size: 3247
     - path: data/processed/y_train.pckl
-      md5: 1d104a68abc723d955ece9ed1c3de3a7
-      size: 10912
+      md5: 74f3ed4caff5d27c902332558638e89a
+      size: 10913
     - path: src/train.py
       md5: e3f1fe3b75294ccb7043d8fe64222256
       size: 4217
@@ -98,7 +98,7 @@ stages:
       params.yaml:
         base:
           seed: 42
-          pokemon_type_train: Fire
+          pokemon_type_train: Steel
         data_preprocess:
           source_directory: data/external
           destination_directory: data/processed
@@ -114,8 +114,8 @@ stages:
       md5: 27e7f50d753c709a43174465c5a40159
       size: 194467
     - path: outputs/train_history.png
-      md5: 8dc6ce73890679d71bdb587acdafbacc
-      size: 54662
+      md5: 57734662e661786356ad2e71a9646566
+      size: 54618
   evaluate:
     cmd: python3 src/evaluate.py --params params.yaml
     deps:
@@ -126,17 +126,17 @@ stages:
       md5: 27e7f50d753c709a43174465c5a40159
       size: 194467
     - path: outputs/train_history.png
-      md5: 8dc6ce73890679d71bdb587acdafbacc
-      size: 54662
+      md5: 57734662e661786356ad2e71a9646566
+      size: 54618
     params:
       params.yaml:
         base:
           seed: 42
-          pokemon_type_train: Fire
+          pokemon_type_train: Steel
     outs:
     - path: outputs/confusion_matrix.png
-      md5: ac21f4e7f10cf463de95e47c4d577f86
-      size: 23087
+      md5: 679364cfbd852259cc6a75bf245a6b57
+      size: 22939
     - path: outputs/metrics.yaml
-      md5: c1d3b4e223c97dccc21ccf7674110baa
-      size: 91
+      md5: 08d7ebdf834188152df38f1b14ec4c80
+      size: 104
