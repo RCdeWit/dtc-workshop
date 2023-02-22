@@ -1,7 +1,6 @@
 notebook==6.5.2
 dvc[all]==2.44.0
-tensorflow-macos==2.9
-tensorflow-metal==0.5.0
+tensorflow==2.9
 pandas==1.5.3
 pillow==9.4.0
 matplotlib==3.6.3
