@@ -1,0 +1,163 @@
+schema: '2.0'
+stages:
+  data_preprocess:
+    cmd: python src/data_preprocess.py --params params.yaml
+    deps:
+    - path: data/external/images
+      md5: c48566c030889e71a791e1412d7dddf7.dir
+      size: 118179012
+      nfiles: 905
+    - path: data/external/stats/pokemon-gen-1-8.csv
+      md5: b0b029c2dc01bd0e6f2dbf9eeae8c14e
+      size: 160616
+    - path: src/data_preprocess.py
+      md5: 9044f1c3ce91734931cdcf353240c429
+      size: 3167
+    params:
+      params.yaml:
+        base:
+          seed: 42
+          pokemon_type_train: Dragon
+        data_preprocess:
+          source_directory: data/external
+          destination_directory: data/processed
+          dataset_labels: stats/pokemon-gen-1-8.csv
+          dataset_images: images
+    outs:
+    - path: data/processed/pokemon
+      md5: c48566c030889e71a791e1412d7dddf7.dir
+      size: 118179012
+      nfiles: 905
+    - path: data/processed/pokemon-with-image-paths.csv
+      hash: md5
+      md5: d83c5cef1016e07c094d368a93d35bca
+      size: 109527
+    - path: data/processed/pokemon.csv
+      hash: md5
+      md5: 8c9953d4fb1dcb85871f9158f32eff10
+      size: 47039
+  data_load:
+    cmd: python src/data_load.py --params params.yaml
+    deps:
+    - path: data/processed/pokemon
+      md5: c48566c030889e71a791e1412d7dddf7.dir
+      size: 118179012
+      nfiles: 905
+    - path: data/processed/pokemon-with-image-paths.csv
+      hash: md5
+      md5: d83c5cef1016e07c094d368a93d35bca
+      size: 109527
+    - path: src/data_load.py
+      md5: 3beae88ab58ae0cb8d355477e04f3574
+      size: 2073
+    params:
+      params.yaml:
+        base:
+          seed: 42
+          pokemon_type_train: Dragon
+        data_preprocess:
+          source_directory: data/external
+          destination_directory: data/processed
+          dataset_labels: stats/pokemon-gen-1-8.csv
+          dataset_images: images
+    outs:
+    - path: data/processed/X.pckl
+      md5: 8f6555c6159e27739fd97a61ace395a4
+      size: 2891610169
+    - path: data/processed/X_test.pckl
+      hash: md5
+      md5: 4e11c60b9a929fc30f25b7a478ca60b6
+      size: 581210168
+    - path: data/processed/X_train.pckl
+      hash: md5
+      md5: e7bcb4d9113bce537fc454db4bb4a5f4
+      size: 2310400169
+    - path: data/processed/y.pckl
+      hash: md5
+      md5: 36a6a2c5b8ee9201257c99762d105ab2
+      size: 7073
+    - path: data/processed/y_test.pckl
+      hash: md5
+      md5: 763d8277cd61dc8347fd3e6449ea7efd
+      size: 3248
+    - path: data/processed/y_train.pckl
+      hash: md5
+      md5: c8135ca15906dfb1766cbae114320985
+      size: 10914
+  train:
+    cmd: python src/train.py --params params.yaml
+    deps:
+    - path: data/processed/X_test.pckl
+      hash: md5
+      md5: 4e11c60b9a929fc30f25b7a478ca60b6
+      size: 581210168
+    - path: data/processed/X_train.pckl
+      hash: md5
+      md5: e7bcb4d9113bce537fc454db4bb4a5f4
+      size: 2310400169
+    - path: data/processed/y_test.pckl
+      hash: md5
+      md5: 763d8277cd61dc8347fd3e6449ea7efd
+      size: 3248
+    - path: data/processed/y_train.pckl
+      hash: md5
+      md5: c8135ca15906dfb1766cbae114320985
+      size: 10914
+    - path: src/train.py
+      hash: md5
+      md5: d2a33e6d884a2c4e7699c5fd411c0300
+      size: 4055
+    params:
+      params.yaml:
+        base:
+          seed: 42
+          pokemon_type_train: Dragon
+        data_preprocess:
+          source_directory: data/external
+          destination_directory: data/processed
+          dataset_labels: stats/pokemon-gen-1-8.csv
+          dataset_images: images
+        train:
+          test_size: 0.2
+          learning_rate: 0.001
+          epochs: 15
+          batch_size: 120
+    outs:
+    - path: outputs/model
+      hash: md5
+      md5: 21321212d5bbe167c20b881440f5bfe6.dir
+      size: 1507711
+      nfiles: 4
+    - path: outputs/train_history.png
+      hash: md5
+      md5: b85d410f992d05bf2ef3b08163f7117a
+      size: 53206
+  evaluate:
+    cmd: python src/evaluate.py --params params.yaml
+    deps:
+    - path: outputs/model/keras_metadata.pb
+      hash: md5
+      md5: c7f12fbd11650bd6ea7c3fdd7b53e8f4
+      size: 17311
+    - path: outputs/model/saved_model.pb
+      hash: md5
+      md5: 044e312dae1c89084aaf8af5d9551418
+      size: 194467
+    - path: outputs/train_history.png
+      hash: md5
+      md5: b85d410f992d05bf2ef3b08163f7117a
+      size: 53206
+    params:
+      params.yaml:
+        base:
+          seed: 42
+          pokemon_type_train: Dragon
+    outs:
+    - path: outputs/confusion_matrix.png
+      hash: md5
+      md5: 0331572c77ef147c729e88a7b6e16fb1
+      size: 23113
+    - path: outputs/metrics.yaml
+      hash: md5
+      md5: 5d08a92ee9b5b19b7090dd8c42072eef
+      size: 90

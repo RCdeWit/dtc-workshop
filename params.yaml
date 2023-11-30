@@ -1,0 +1,15 @@
+base:
+  seed: 42
+  pokemon_type_train: Dragon
+
+data_preprocess:
+  source_directory: data/external
+  destination_directory: data/processed
+  dataset_labels: stats/pokemon-gen-1-8.csv
+  dataset_images: images
+
+train:
+  test_size: 0.2
+  learning_rate: 0.001
+  epochs: 15
+  batch_size: 120

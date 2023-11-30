@@ -1,4 +1,5 @@
 # [Data Talks Club] GitOps for ML: Converting Notebooks to Reproducible Pipelines
+https://www.youtube.com/watch?v=6x6GwtNeYdI
 
 In this hands-on workshop, we’ll take a prototype in a Jupyter Notebook and
 transform it into a DVC pipeline. We’ll then use that pipeline locally to run

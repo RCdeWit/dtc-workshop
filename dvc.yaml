@@ -1,0 +1,58 @@
+stages:
+  data_preprocess:
+    cmd: python src/data_preprocess.py --params params.yaml
+    deps:
+      - src/data_preprocess.py
+      - data/external/images
+      - data/external/stats/pokemon-gen-1-8.csv
+    outs:
+      - data/processed/pokemon.csv
+      - data/processed/pokemon-with-image-paths.csv
+      - data/processed/pokemon
+    params:
+      - base
+      - data_preprocess
+  data_load:
+    cmd: python src/data_load.py --params params.yaml
+    deps:
+      - src/data_load.py
+      - data/processed/pokemon-with-image-paths.csv
+      - data/processed/pokemon
+    outs:
+      - data/processed/X.pckl
+      - data/processed/X_train.pckl
+      - data/processed/X_test.pckl
+      - data/processed/y.pckl
+      - data/processed/y_train.pckl
+      - data/processed/y_test.pckl
+    params:
+      - base
+      - data_preprocess
+  train:
+    cmd: python src/train.py --params params.yaml
+    deps:
+      - src/train.py
+      - data/processed/X_train.pckl
+      - data/processed/X_test.pckl
+      - data/processed/y_train.pckl
+      - data/processed/y_test.pckl
+    outs:
+      - outputs/model
+      - outputs/train_history.png
+    params:
+      - base
+      - data_preprocess
+      - train
+  evaluate:
+    cmd: python src/evaluate.py --params params.yaml
+    deps:
+      - outputs/model/keras_metadata.pb
+      - outputs/model/saved_model.pb
+      - outputs/train_history.png
+    outs:
+      - outputs/confusion_matrix.png
+    params:
+      - base
+    metrics:
+      - outputs/metrics.yaml:
+          cache: false
