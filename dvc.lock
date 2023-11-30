@@ -1,0 +1,159 @@
+schema: '2.0'
+stages:
+  data_preprocess:
+    cmd: python src/data_preprocess.py --params params.yaml
+    deps:
+    - path: data/external/images
+      md5: c48566c030889e71a791e1412d7dddf7.dir
+      size: 118179012
+      nfiles: 905
+    - path: data/external/stats/pokemon-gen-1-8.csv
+      md5: b0b029c2dc01bd0e6f2dbf9eeae8c14e
+      size: 160616
+    - path: src/data_preprocess.py
+      md5: 9044f1c3ce91734931cdcf353240c429
+      size: 3167
+    params:
+      params.yaml:
+        base:
+          seed: 42
+          pokemon_type_train: Water
+        data_preprocess:
+          source_directory: data/external
+          destination_directory: data/processed
+          dataset_labels: stats/pokemon-gen-1-8.csv
+          dataset_images: images
+    outs:
+    - path: data/processed/pokemon
+      md5: c48566c030889e71a791e1412d7dddf7.dir
+      size: 118179012
+      nfiles: 905
+    - path: data/processed/pokemon-with-image-paths.csv
+      hash: md5
+      md5: c52b925d3573270a7377e6e8bc37e90d
+      size: 109527
+    - path: data/processed/pokemon.csv
+      hash: md5
+      md5: 102a3d4e0350c5934c8fd2b24c90b028
+      size: 47039
+  data_load:
+    cmd: python src/data_load.py --params params.yaml
+    deps:
+    - path: data/processed/pokemon
+      md5: c48566c030889e71a791e1412d7dddf7.dir
+      size: 118179012
+      nfiles: 905
+    - path: data/processed/pokemon-with-image-paths.csv
+      hash: md5
+      md5: c52b925d3573270a7377e6e8bc37e90d
+      size: 109527
+    - path: src/data_load.py
+      md5: 3beae88ab58ae0cb8d355477e04f3574
+      size: 2073
+    params:
+      params.yaml:
+        base:
+          seed: 42
+          pokemon_type_train: Water
+        data_preprocess:
+          source_directory: data/external
+          destination_directory: data/processed
+          dataset_labels: stats/pokemon-gen-1-8.csv
+          dataset_images: images
+    outs:
+    - path: data/processed/X.pckl
+      md5: 8f6555c6159e27739fd97a61ace395a4
+      size: 2891610169
+    - path: data/processed/X_test.pckl
+      hash: md5
+      md5: 23c3aa551e6826615b71e592972997a8
+      size: 581210168
+    - path: data/processed/X_train.pckl
+      hash: md5
+      md5: 364b2c4e8fe73f88a79ef5da6416abac
+      size: 2310400169
+    - path: data/processed/y.pckl
+      hash: md5
+      md5: f156295a269847ea043fff40f8cca0a7
+      size: 7072
+    - path: data/processed/y_test.pckl
+      hash: md5
+      md5: 05695e9b10f3c84048b6c6d0af01bd30
+      size: 3247
+    - path: data/processed/y_train.pckl
+      hash: md5
+      md5: 25b4a8bb684e918396014650bfcfeffd
+      size: 10913
+  train:
+    cmd: python src/train.py --params params.yaml
+    deps:
+    - path: data/processed/X_test.pckl
+      md5: 23c3aa551e6826615b71e592972997a8
+      size: 581210168
+    - path: data/processed/X_train.pckl
+      md5: 364b2c4e8fe73f88a79ef5da6416abac
+      size: 2310400169
+    - path: data/processed/y_test.pckl
+      md5: 05695e9b10f3c84048b6c6d0af01bd30
+      size: 3247
+    - path: data/processed/y_train.pckl
+      md5: 25b4a8bb684e918396014650bfcfeffd
+      size: 10913
+    - path: src/train.py
+      hash: md5
+      md5: c1c31fe2472322e96c64b5dd9bf5b2bc
+      size: 4078
+    params:
+      params.yaml:
+        base:
+          seed: 42
+          pokemon_type_train: Water
+        data_preprocess:
+          source_directory: data/external
+          destination_directory: data/processed
+          dataset_labels: stats/pokemon-gen-1-8.csv
+          dataset_images: images
+        train:
+          test_size: 0.2
+          learning_rate: 0.001
+          epochs: 15
+          batch_size: 120
+    outs:
+    - path: outputs/model
+      hash: md5
+      md5: c9d0434e11c3cac21a55c1c2bf2fd93d.dir
+      size: 1507711
+      nfiles: 4
+    - path: outputs/train_history.png
+      hash: md5
+      md5: 9ef932ad29a5107e9c219e3652c9d330
+      size: 54241
+  evaluate:
+    cmd: python src/evaluate.py --params params.yaml
+    deps:
+    - path: outputs/model/keras_metadata.pb
+      hash: md5
+      md5: c7f12fbd11650bd6ea7c3fdd7b53e8f4
+      size: 17311
+    - path: outputs/model/saved_model.pb
+      hash: md5
+      md5: 044e312dae1c89084aaf8af5d9551418
+      size: 194467
+    - path: outputs/train_history.png
+      hash: md5
+      md5: 9ef932ad29a5107e9c219e3652c9d330
+      size: 54241
+    params:
+      params.yaml:
+        base:
+          seed: 42
+          pokemon_type_train: Water
+    outs:
+    - path: outputs/confusion_matrix.png
+      hash: md5
+      md5: e10bcae55c34bfe026a65ea00acda1c2
+      size: 22285
+    - path: outputs/metrics.yaml
+      hash: md5
+      md5: a744d45ab0e17293c26ac8beb9e5c522
+      size: 103
