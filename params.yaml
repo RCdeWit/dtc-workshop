@@ -1,6 +1,6 @@
 base:
   seed: 42
-  pokemon_type_train: Water
+  pokemon_type_train: Dragon
 
 data_preprocess:
   source_directory: data/external

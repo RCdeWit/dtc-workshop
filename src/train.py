@@ -54,7 +54,6 @@ def compile_model(model_image_size_x, model_image_size_y):
 
 def train_estimator(model):
     def calculate_class_weights(y_train):
-        print(y_train)
         ratio_true = sum(y_train.values == 1) / len(y_train)
         ratio_false = sum(y_train.values != 1) / len(y_train)
 
